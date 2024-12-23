@@ -1,0 +1,10 @@
+{
+  "extends": "../.nuxt/tsconfig.json",
+  "compilerOptions": {
+    "strict": true,
+    "moduleResolution": "Node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "useUnknownInCatchVariables": false
+  }
+}

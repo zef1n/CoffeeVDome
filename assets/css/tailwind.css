@@ -1,0 +1,5 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Если используете daisyUI и хотите переопределить что-то, можете добавить здесь. */
