@@ -1,5 +1,5 @@
 // stores/userStore.ts
-import { defineStore } from 'pinia'
+import {defineStore} from 'pinia'
 
 interface UserState {
     accessToken: string
@@ -29,7 +29,8 @@ export const useUserStore = defineStore('userStore', {
 
     // Настраиваем persisted state
     persist: {
-        key: 'my-app-user', // можно любое название
+        key: 'my-app-user',
+        paths: ['accessToken']// можно любое название
         // или просто true, тогда по умолчанию key = 'userStore'
         // persist: true,
 
