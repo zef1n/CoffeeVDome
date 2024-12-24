@@ -1,3 +1,4 @@
+<!-- pages/index.vue -->
 <template>
   <!-- Контейнер страницы -->
   <div class="min-h-screen bg-base-200 p-5 flex flex-col items-center">
@@ -49,25 +50,25 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
-import { useCatalogStore } from '~/stores/catalogStore'
-import { useCartStore } from '~/stores/cartStore'
-import { useUserStore } from '~/stores/userStore'
+import {onMounted} from 'vue'
+import {useCatalogStore} from '~/stores/catalogStore'
+import {useCartStore} from '~/stores/cartStore'
+import {useUserStore} from '~/stores/userStore'
 
 const catalogStore = useCatalogStore()
 const cartStore = useCartStore()
 const userStore = useUserStore()
 
-// Метод добавления в корзину
-const addToCart = (productId: number) => {
-  // Если не авторизован, можно вместо disabled сделать редирект:
-  // if (!userStore.isLoggedIn) return alert('Сначала войдите в аккаунт!')
-
-  cartStore.addToCart(productId)
-}
-
 // При монтировании страницы загружаем товары
 onMounted(() => {
   catalogStore.fetchProducts()
 })
+
+const addToCart = (productId: number) => {
+  if (!userStore.isLoggedIn) {
+    alert('Сначала войдите в аккаунт!')
+    return
+  }
+  cartStore.addToCart(productId)
+}
 </script>
