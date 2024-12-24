@@ -10,8 +10,8 @@
 
     <!-- Блок: данные о пользователе -->
     <div
-        v-else
-        class="card w-full max-w-md bg-base-100 shadow-xl p-5 flex flex-col items-center"
+      v-else
+      class="card w-full max-w-md bg-base-100 shadow-xl p-5 flex flex-col items-center"
     >
       <!-- Аватар, если есть -->
       <div v-if="userStore.user.photo_url" class="avatar mb-4">
@@ -35,6 +35,13 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from 'vue'
 import { useUserStore } from '~/stores/userStore'
+
 const userStore = useUserStore()
+
+onMounted(() => {
+  // При заходе на страницу — грузим профиль
+  userStore.fetchUserProfile()
+})
 </script>

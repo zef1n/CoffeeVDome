@@ -1,6 +1,6 @@
 // cartStore.ts (Pinia)
-import { defineStore } from 'pinia'
-import { useNuxtApp } from '#app'
+import {defineStore} from 'pinia'
+import {useNuxtApp} from '#app'
 
 export interface Product {
     id: number
@@ -43,8 +43,9 @@ export const useCartStore = defineStore('cartStore', {
         // 1. Получить корзину (GET /cart/)
         async fetchCart() {
             try {
-                const { $axios } = useNuxtApp()
-                const { data } = await $axios.get('/cart/')
+                const {$axios} = useNuxtApp()
+                const {data} = await $axios.get('/cart/')
+                console.log('Данные корзины:', data) // Вывод данных для отладки
                 this.cart = data
             } catch (error) {
                 console.error('Ошибка при загрузке корзины:', error)
@@ -54,7 +55,7 @@ export const useCartStore = defineStore('cartStore', {
         // 2. Добавить товар (POST /cart/add/)
         async addToCart(productId: number, quantity = 1) {
             try {
-                const { $axios } = useNuxtApp()
+                const {$axios} = useNuxtApp()
                 await $axios.post('/cart/add/', {
                     product_id: productId,
                     quantity
@@ -68,7 +69,7 @@ export const useCartStore = defineStore('cartStore', {
         // 3. Удалить товар (DELETE /cart/remove/<product_id>/)
         async removeFromCart(productId: number) {
             try {
-                const { $axios } = useNuxtApp()
+                const {$axios} = useNuxtApp()
                 await $axios.delete(`/cart/remove/${productId}/`)
                 await this.fetchCart()
             } catch (error) {
@@ -79,7 +80,7 @@ export const useCartStore = defineStore('cartStore', {
         // 4. Оформить заказ (POST /cart/checkout/)
         async checkout() {
             try {
-                const { $axios } = useNuxtApp()
+                const {$axios} = useNuxtApp()
                 await $axios.post('/cart/checkout/')
                 // после оформления status='completed'
                 await this.fetchCart()
