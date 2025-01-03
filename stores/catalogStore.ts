@@ -15,6 +15,9 @@ export const useCatalogStore = defineStore('catalogStore', {
         products: [] as Product[],
     }),
     actions: {
+        /**
+         * Получаем список товаров (GET /products/).
+         */
         async fetchProducts() {
             try {
                 const { $axios } = useNuxtApp()
@@ -25,11 +28,14 @@ export const useCatalogStore = defineStore('catalogStore', {
             }
         },
 
+        /**
+         * Создаём новый товар (POST /products/).
+         * (Используется реже, обычно админка.)
+         */
         async createProduct(newProduct: Partial<Product>) {
             try {
                 const { $axios } = useNuxtApp()
                 const { data } = await $axios.post<Product>('/products/', newProduct)
-                // Можно добавить этот товар в локальный стейт:
                 this.products.push(data)
             } catch (error) {
                 console.error('Ошибка при создании товара:', error)
