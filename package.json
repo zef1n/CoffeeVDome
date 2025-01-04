@@ -10,8 +10,10 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@heroicons/vue": "^1.0.6",
     "axios": "^1.7.9",
     "daisyui": "^4.12.22",
+    "heroicons": "^2.2.0",
     "nuxt": "^3.14.1592",
     "pinia": "^2.3.0",
     "pinia-plugin-persistedstate": "^4.2.0",
