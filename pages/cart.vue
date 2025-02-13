@@ -68,7 +68,7 @@
       <!-- Итого -->
       <div class="mt-6 sm:mt-8 text-right">
         <h2 class="text-xl sm:text-2xl font-bold">
-          Итого: {{ cartStore.totalPrice }} ₽
+          Итого: {{ formattedTotalPrice }} ₽
         </h2>
         <button class="btn btn-primary mt-3" @click="checkout">
           Оформить заказ
@@ -98,7 +98,9 @@ const decreaseQuantity = (item: any) => {
 const increaseQuantity = (item: any) => {
   cartStore.updateItemQuantity(item.product.id, item.quantity + 1)
 }
-
+const formattedTotalPrice = computed(() => {
+  return parseFloat(cartStore.totalPrice.toString()).toFixed(2) // Преобразуем итоговую сумму в формат "0.00"
+})
 const removeItem = (item: any) => {
   cartStore.removeFromCart(item.product.id)
 }

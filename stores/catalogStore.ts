@@ -6,39 +6,33 @@ export interface Product {
     title: string
     description: string
     price: number
-    image?: string
+    image_url?: string
     created_at?: string
 }
 
 export const useCatalogStore = defineStore('catalogStore', {
     state: () => ({
         products: [] as Product[],
+        loading: false,
+        error: null as string | null,
     }),
     actions: {
-        /**
-         * Получаем список товаров (GET /products/).
-         */
         async fetchProducts() {
+            this.loading = true
+            this.error = null
             try {
                 const { $axios } = useNuxtApp()
-                const { data } = await $axios.get<Product[]>('/products/')
-                this.products = data
+                const { data } = await $axios.get<Product[]>('menu/products/')
+                this.products = data.map(product => ({
+                    ...product,
+                    price: Number(product.price), // Преобразуем price в число
+                    image_url: product.image_url || '/placeholder.jpg',
+                }))
             } catch (error) {
                 console.error('Ошибка при загрузке товаров:', error)
-            }
-        },
-
-        /**
-         * Создаём новый товар (POST /products/).
-         * (Используется реже, обычно админка.)
-         */
-        async createProduct(newProduct: Partial<Product>) {
-            try {
-                const { $axios } = useNuxtApp()
-                const { data } = await $axios.post<Product>('/products/', newProduct)
-                this.products.push(data)
-            } catch (error) {
-                console.error('Ошибка при создании товара:', error)
+                this.error = 'Ошибка при загрузке товаров. Попробуйте позже.'
+            } finally {
+                this.loading = false
             }
         },
     },

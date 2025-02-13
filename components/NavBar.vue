@@ -1,143 +1,110 @@
 <template>
-  <!-- Верхняя панель (десктоп) - зафиксирована сверху, поверх всего -->
-  <nav
-      class="fixed top-0 left-0 w-full bg-base-100 shadow-md p-2 sm:p-3 hidden lg:flex
-           items-center z-50"
-  >
-    <!-- Левая часть (логотип) -->
-    <div class="navbar-start flex-1">
-      <NuxtLink to="/" class="btn btn-ghost normal-case text-xl">
-        Кофе в доме
-      </NuxtLink>
-    </div>
-
-    <!-- Центральная часть (иконки / пункты) -->
-    <div class="navbar-center flex-none">
-      <ul class="menu menu-horizontal px-1 gap-2">
-        <li>
-          <NuxtLink to="/" class="p-2" title="Главная">
-            <HomeIcon class="w-5 h-5" />
-          </NuxtLink>
-        </li>
-        <li>
-          <NuxtLink to="/cart" class="p-2" title="Корзина">
-            <ShoppingCartIcon class="w-5 h-5" />
-          </NuxtLink>
-        </li>
-        <li>
-          <NuxtLink to="/profile" class="p-2" title="Профиль">
-            <UserIcon class="w-5 h-5" />
-          </NuxtLink>
-        </li>
-      </ul>
-    </div>
-
-    <!-- Правая часть (авторизация) -->
-    <div class="navbar-end flex-none">
-      <div v-if="!userStore.isLoggedIn" class="flex items-center gap-2">
-        <NuxtLink
-            to="/login"
-            class="btn btn-ghost btn-sm flex items-center gap-1"
-            title="Войти"
-        >
-          <LockClosedIcon class="w-4 h-4" />
-          <span class="hidden sm:inline">Войти</span>
+  <header class="fixed top-0 left-0 right-0 z-50 backdrop-blur-sm bg-white/70">
+    <nav class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <!-- Логотип -->
+      <div class="flex items-center space-x-2">
+        <!-- Замените /logo.svg на путь к вашему логотипу -->
+        <img src="" alt="Coffee Haven Logo" class="h-8 w-auto" />
+        <span class="text-xl font-semibold text-gray-800">Coffee Haven</span>
+      </div>
+      <!-- Основное меню (десктоп) -->
+      <div class="hidden md:flex space-x-8">
+        <NuxtLink to="/" class="text-gray-700 hover:text-amber-700 transition">
+          Home
         </NuxtLink>
-        <NuxtLink
-            to="/register"
-            class="btn btn-primary btn-sm flex items-center gap-1"
-            title="Регистрация"
-        >
-          <PencilIcon class="w-4 h-4" />
-          <span class="hidden sm:inline">Регистрация</span>
+        <NuxtLink to="/menu" class="text-gray-700 hover:text-amber-700 transition">
+          Menu
+        </NuxtLink>
+        <NuxtLink to="/about" class="text-gray-700 hover:text-amber-700 transition">
+          About
+        </NuxtLink>
+        <NuxtLink to="/contact" class="text-gray-700 hover:text-amber-700 transition">
+          Contact
         </NuxtLink>
       </div>
-      <div v-else>
-        <button
-            class="btn btn-error btn-sm flex items-center gap-1"
-            @click="onLogout"
-            title="Выйти"
+      <!-- Кнопка "Order Now" (десктоп) -->
+      <div class="hidden md:block">
+        <NuxtLink
+            to="/order"
+            class="px-4 py-2 border border-amber-700 text-amber-700 rounded-full hover:bg-amber-700 hover:text-white transition"
         >
-          <ArrowLeftIcon class="w-4 h-4" />
-          <span class="hidden sm:inline">Выйти</span>
+          Order Now
+        </NuxtLink>
+      </div>
+      <!-- Кнопка для мобильного меню -->
+      <div class="md:hidden">
+        <button @click="toggleMobileMenu" class="text-gray-700 focus:outline-none">
+          <MenuIcon v-if="!showMobileMenu" class="h-6 w-6" />
+          <XIcon v-else class="h-6 w-6" />
         </button>
       </div>
-    </div>
-  </nav>
-
-  <!-- Мобильная панель (иконки внизу) - зафиксирована снизу, поверх всего -->
-  <div
-      class="fixed bottom-0 left-0 w-full bg-base-100 p-2 shadow-inner flex justify-around items-center
-           lg:hidden z-50"
-  >
-    <!-- Иконка "Главная" -->
-    <NuxtLink to="/" class="p-2" title="Главная">
-      <HomeIcon class="w-6 h-6 text-gray-600 hover:text-gray-800" />
-    </NuxtLink>
-
-    <!-- Иконка "Корзина" -->
-    <NuxtLink to="/cart" class="p-2" title="Корзина">
-      <ShoppingCartIcon class="w-6 h-6 text-gray-600 hover:text-gray-800" />
-    </NuxtLink>
-
-    <!-- Иконка "Профиль / Вход" -->
-    <NuxtLink
-        v-if="!userStore.isLoggedIn"
-        to="/login"
-        class="p-2"
-        title="Войти"
-    >
-      <UserIcon class="w-6 h-6 text-gray-600 hover:text-gray-800" />
-    </NuxtLink>
-    <button
-        v-else
-        class="p-2"
-        @click="onLogout"
-        title="Выйти"
-    >
-      <ArrowLeftIcon class="w-6 h-6 text-gray-600 hover:text-gray-800" />
-    </button>
-  </div>
+    </nav>
+    <!-- Мобильное меню -->
+    <transition name="fade">
+      <div
+          v-if="showMobileMenu"
+          class="md:hidden bg-white shadow-md border-t border-gray-200"
+      >
+        <div class="px-6 py-4 flex flex-col space-y-4">
+          <NuxtLink
+              to="/"
+              class="text-gray-700 hover:text-amber-700 transition"
+              @click="toggleMobileMenu"
+          >
+            Home
+          </NuxtLink>
+          <NuxtLink
+              to="/menu"
+              class="text-gray-700 hover:text-amber-700 transition"
+              @click="toggleMobileMenu"
+          >
+            Menu
+          </NuxtLink>
+          <NuxtLink
+              to="/about"
+              class="text-gray-700 hover:text-amber-700 transition"
+              @click="toggleMobileMenu"
+          >
+            About
+          </NuxtLink>
+          <NuxtLink
+              to="/contact"
+              class="text-gray-700 hover:text-amber-700 transition"
+              @click="toggleMobileMenu"
+          >
+            Contact
+          </NuxtLink>
+          <NuxtLink
+              to="/order"
+              class="px-4 py-2 border border-amber-700 text-amber-700 rounded-full text-center hover:bg-amber-700 hover:text-white transition"
+              @click="toggleMobileMenu"
+          >
+            Order Now
+          </NuxtLink>
+        </div>
+      </div>
+    </transition>
+  </header>
 </template>
 
 <script setup lang="ts">
-import { useUserStore } from '~/stores/userStore'
-import { useRouter } from '#app'
+import { ref } from 'vue'
+import { MenuIcon, XIcon } from '@heroicons/vue/outline'
 
-// Иконки Heroicons (outline версия)
-import {
-  HomeIcon,
-  ShoppingCartIcon,
-  UserIcon,
-  LockClosedIcon,
-  PencilIcon,
-  ArrowLeftIcon
-} from '@heroicons/vue/outline'
-
-const userStore = useUserStore()
-const router = useRouter()
-
-const onLogout = () => {
-  userStore.logout()
-  router.push('/')
+const showMobileMenu = ref(false)
+const toggleMobileMenu = () => {
+  showMobileMenu.value = !showMobileMenu.value
 }
 </script>
 
 <style scoped>
-/* Можно добавить отступы для контента,
-   чтобы не перекрывать верхней и нижней панелью.
-
-   Пример:
-   body, main {
-     padding-top: 64px;   // высота nav
-     padding-bottom: 56px; // высота bottom nav
-   }
-*/
-
-/* При желании подправить стили иконок */
-.menu li > a > svg,
-.menu li > button > svg {
-  width: 1.25rem;
-  height: 1.25rem;
+/* Плавное появление/исчезновение мобильного меню */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

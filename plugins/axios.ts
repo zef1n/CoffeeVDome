@@ -5,7 +5,7 @@ import {useUserStore} from '~/stores/userStore'
 export default defineNuxtPlugin((nuxtApp) => {
     // Создаём инстанс axios
     const instance = axios.create({
-        baseURL: 'http://127.0.0.1:8000/api', // ваш базовый URL
+        baseURL: 'http://127.0.0.1:8000/', // ваш базовый URL
         // можно и через .env, напр. process.env.NUXT_API_URL
     })
 

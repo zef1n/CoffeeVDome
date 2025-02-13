@@ -17,7 +17,7 @@ export const useUserStore = defineStore('userStore', {
                 const payload: Record<string, string> = {username, password}
                 if (email) payload.email = email
 
-                await $axios.post('/auth/register/', payload)
+                await $axios.post('users/auth/register/', payload)
                 // После успешной регистрации, возможно, сразу логиним пользователя
                 // await this.login(username, password)
             } catch (error) {
@@ -34,7 +34,7 @@ export const useUserStore = defineStore('userStore', {
         async login(username: string, password: string) {
             try {
                 const {$axios} = useNuxtApp()
-                const {data} = await $axios.post('/auth/token/', {
+                const {data} = await $axios.post('users/auth/token/', {
                     username,
                     password
                 })
@@ -79,7 +79,7 @@ export const useUserStore = defineStore('userStore', {
             try {
                 const {$axios} = useNuxtApp()
                 // допустим, ваш бэкенд отдаёт профиль на /profile/ или /auth/me
-                const {data} = await $axios.get('/profile/')
+                const {data} = await $axios.get('users/profile/')
                 // сохраняем в store
                 this.user = data
             } catch (error) {
